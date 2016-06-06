@@ -1,0 +1,272 @@
+<html>
+<head>
+  
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  
+
+</head>
+
+<body>
+
+<div class="body-wrap">
+  
+  <div class="body-container">
+
+    <div class="body-header"><%=link_to $h, products_manu_path($h),:style=>"color:white;"%></div>
+
+      <div class="body-content">
+    
+        <div class="container">
+    
+          <div class="row">
+          
+            <%@taxo4=$taxo12.reverse%>
+          
+              <div class="col-md-12">
+           
+                <ol class="breadcrumb">
+            
+                    <%@taxo4.map do |i|%>
+            
+                    <li class="active"><%=link_to i.pluck(:cat_name)[0],  products_manu_path(i.pluck(:id)[0])%></li>
+            
+                    <%break if @taxo4.last==i%> 
+
+                    <i class="fa fa-angle-double-right" style="font-size: 16px; color: rgb(185, 31, 31);"></i> 
+            
+                    <%end%>
+            
+                </ol>
+            
+              </div>
+              
+          </div>
+
+                <%unless @pkk1.is_a? Mongoid::Criteria%>
+
+                  <div class="row">
+                 
+                    <%unless @tt==nil%>
+ 
+                      <% @taxo1.map do |i|%>
+                      
+                          <%if i.parent_id == nil%>
+                      
+                            <div class="col-md-6">
+                        
+                              <div class="manufacture">
+                                  
+                                <div class="content">
+                        
+                                  <div class="header">
+                        
+                                <% @x=@taxo1.map{|a| a.parent_id==i.id}.count(true)%>
+
+                                     <%=i.cat_name+" (#{@x})"%>
+
+                        
+                                  </div>
+                
+                                    <%@l1=i.id%>
+       
+                                    <ul> 
+                                        
+                                        <% @taxo1.map do|k|%>
+  
+                                        <%if k.parent_id==@l1%>
+          
+                                        <li>  <%@y=@taxo1.map{|b|b.parent_id==k.id}.count(true)%>
+
+                                                     <%=link_to k.cat_name+"(#{@y})",products_manu_path(k.id)%></li>
+
+                                        <%end%>
+                                        
+                                        <%end%>
+                                        
+                                    </ul>
+                                    
+                                </div>
+                                
+                                <div class="clearfix"></div>
+                                
+                           </div>
+                           
+                           <div class="clearfix"></div>
+                           
+                           </div>
+                           
+                  <%end%>
+                                    
+
+              <%end%>
+          
+
+<%else%>
+
+              <div class="col-md-6">
+
+                   <div class="manufacture">
+                                  
+                       <div class="content">
+                            
+                            <div class="header">
+
+                            <%@z=@taxo1.count {|c| c.parent_id != nil }%>
+
+                               <%=@nn.to_s+"(#{@z})"%>
+                            </div>
+
+                                  <ul>
+                            
+                                    <%@taxo1.map do|i|%>
+   
+                                      <li>
+
+                                       <%@count1=Sku.where(:p_id=>i.id).where(:name=>"Manufacturer Name").where(:value=>$h).pluck(:i_id).uniq.count%>
+
+                                           <%=link_to i.cat_name+"(#{@count1})",products_manu_path(i.id),:style=>" font-size: 12px;"%>
+
+                                             </li>
+                            
+                                     <%end%>
+                             
+                                  </ul>
+                        </div>
+                         
+                          <div class="clearfix"></div>
+                    
+                    </div>
+                   
+                   <div class="clearfix"></div>
+              
+              </div>
+              
+           <%end%>
+    
+        </div>
+
+<%else%>
+
+<div class="row">
+<div class="col-md-12">
+<div class="compare-table">
+<table class="table">
+
+
+
+<center><%= will_paginate @pkk3 %></center>
+
+    <thead>
+
+       <tr>
+
+        <th>Image</th>
+        <th>Item ID</th>
+        <th>Product Name</th>
+        <th>Description</th>
+        <th> 
+          <form controller="products" action="compare" accept-charset="UTF-8" method="post" name="form1" onsubmit="return validate()">
+          <button class="btn btn-block btn-default hvr-sweep-to-right" type="submit"><img src="/assets/compare-icon.png"> Compare</button></th>
+
+  </tr>
+
+</thead>
+
+<!--%= will_paginate @pkk3 %-->
+
+
+
+<%@pkk3.to_a.map do|i|%>
+
+<%@p=Sku.where(:i_id=>i)%>
+
+<%@im=@p.where(:c_name=> "IMAGE").pluck(:value)[0]%>
+
+<%@i1=@p.where(:name=> "Product Name").pluck(:id)[0]%>
+
+<tbody><tr><td class="r">
+
+ <%if @im.blank?%>
+
+ <img style="width:70%; height:100px;" src="/assets/not.jpeg" alt="Image not available">
+
+ <%else%>
+
+ <%=image_tag @im, :height=>"100%", :width=>"100%" %>
+
+ <%end%></td>
+
+ <td><%= i %></td>
+
+ <td><%=@p.where(:name=> "Product Name").pluck(:value)[0]%></td>
+
+ <td><%=link_to @p.where(:name=> "Global Description").pluck(:value)[0], products_manu_edit2_path(i)%></td>
+
+ <td><%= check_box_tag("is[]", i, false,{:onclick=>"chkcontrol();"})%></td></tr>
+
+ <%end%>
+
+<!--%end%-->
+
+ </tbody>
+
+ </table>
+
+<center><%= will_paginate @pkk3 %></center>
+
+</div>
+</div>
+</div>
+
+
+<%end%>
+<div class="clearfix"></div>
+
+</div>
+
+<div class="clearfix"></div>
+
+</div>
+
+<div class="clearfix"></div>
+
+</div>
+
+<div class="clearfix"></div>
+
+</div>
+
+
+</body>
+
+</html>
+
+<script language="javascript">
+
+ function validate()
+
+ { var chks = document.getElementsByName('is[]');
+
+ var checkCount = 0;
+
+ for (var i = 0; i < chks.length; i++)
+
+ { if (chks[i].checked)
+
+ { checkCount++; } }
+
+ if (checkCount < 2)
+
+ { alert("Please Select at least two.");
+
+ return false; }
+
+ else if (checkCount > 4) {
+
+ alert("Select Only four");
+
+ return false; }
+
+ else { return true; } }
+
+</script>

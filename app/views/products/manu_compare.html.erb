@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+ <head> 
+  
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  
+ </head>
+
+ <div class="body-wrap">
+ 
+   <div class="body-container">
+ 
+     <div class="body-header">
+ 
+       <%=link_to $h, products_manu_path($h), :style=>"color:white;"%>
+  
+      </div>
+  
+      <div class="body-content">
+   
+        <div class="container">
+
+          <div class="row">
+
+            <div class="col-md-12">
+
+              <ol class="breadcrumb">
+
+                <%@taxo4=$taxo12.reverse%>
+
+                    <%@taxo4.map do |i|%>
+
+                      <%=link_to i.pluck(:cat_name)[0],  products_manu_path(i.pluck(:id)[0])%><%break if @taxo4.last==i%>
+                      
+                      <i class="fa fa-angle-double-right" style="font-size: 16px; color: rgb(185, 31, 31);"></i> 
+                
+                    <%end%>
+
+              </ol>
+
+            </div>
+ 
+          </div>
+      
+          <br>
+
+          <div class="product-compare">
+
+            <table class="table">
+
+              <thead>
+
+                <font style="color: rgb(0, 102, 255);"><i class="fa fa-dot-circle-o" style="font-size: 15px; color: rgb(0, 102, 255);"></i>&nbsp;Indicates product differences. <br>
+         
+                <br>
+
+                <% @n.each map|j|%>
+
+                     <%next if j=="Global Description"%>
+
+                     <%unless j=="IMAGE Link-1"%>
+
+                        <%@j=j%><%@ss=[]%> 
+  
+                          <%@cc.map do |i|%>
+              
+                            <%@i=i%> 
+                        
+                            <%@pf = Sku.where(:i_id=>@i).where(:name=>@j).pluck(:value,:unit).uniq.join%>
+       
+                            <%@ss<<@pf%>
+
+                          <%end%>
+
+                          <tr>
+
+                            <%unless ["Manufacturer Name","Manufacturer Part Number","Product Name"].include?(j)%>
+
+                            <%unless @ss.uniq.count==1 %>
+ 
+                          <td style="color: rgb(0, 102, 255);"><i class="fa fa-dot-circle-o" style="color: rgb(0, 102, 255);"></i>&nbsp;
+
+                           <strong><%=@j%></strong>
+
+                          </td>
+
+                        <%else%>
+
+                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><%=@j%></strong></td><%end%>
+
+                  <%else%>
+
+                          <td></td>
+
+                  <%end%>
+
+             <%@ss.map do |i|%>
+  
+                <%if @j=="Manufacturer Part Number"%>
+
+                  <%if @ss.count(i) == 1%>
+
+                        <%@o=Sku.where(:name=>"Manufacturer Part Number").where(:value=>i).pluck(:i_id)[0]%>
+ 
+                    <td><%= link_to i, products_manu_edit2_path(@o)%></td> 
+
+                  <%end%>
+                
+                <%else%>
+
+                  <%if @ss.count(i) == 1%>
+ 
+                    <td style="color: rgb(0, 102, 255);"><%=i%></td> 
+
+                  <%else%>
+ 
+                    <td><%=i%></td>
+ 
+                  <%end%>
+
+               <%end%>
+
+             <%end%>
+ 
+             </thead>
+     
+            </tr>
+              
+ <%else%>
+  
+  <tr class="odd">
+
+    <td><%@j=j%></td>
+              
+    <%@cc.map do |i|%>
+              
+       <%@i=i%> 
+                       
+       <td align="left"><%@p1 = Sku.where(:i_id=>@i).where(:name=>@j).pluck(:value)[0]%>
+                            
+          <%if @p1.blank?%>
+
+              <img src="/assets/not.jpeg" alt="Image not available">
+
+          <%else%>
+
+              <%=image_tag @p1%>
+
+          <%end%>
+
+        </td>
+
+    <%end%>
+
+  </tr>
+
+ <%end%>
+            
+ <%end%></td></tr> 
+
+ 
+
+ </table>
+ </div>
+
+ </div>
+ </div>
+ </div>
+ </div>
+
+</html>

@@ -1,0 +1,71 @@
+<html>
+
+<head>
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  
+<style>
+
+a:hover{ color:white;}
+
+</style>
+
+</head>
+
+<body>
+
+  <div class="body-wrap">
+            	
+  <div class="body-container">
+  
+  <div class="body-header">Manufatures Index</div>
+
+  <div class="body-content">
+  
+  <div class="container">
+  
+  	<div class="row">
+  
+  		<div class="col-md-12">
+  
+  			<span class="sub-title">Please choose a product category to view the manufacturers in that category. </span>
+  
+	  	</div>
+  
+	  </div>
+<%@count=Mfrindex.pluck(:m_name,:taxonomy).map{|p| [p[0],p[1].split('>')[0]]}%>
+
+
+<div class="row">
+
+	<% @productm.map do |i|%> 
+
+		<div class="col-md-6">
+
+			<div class="manufacture-index hvr-sweep-to-right">	
+
+     <%@count1=@count.uniq.select{|p| p[1]==i.cat_name}.count%>
+            
+              <%=link_to i.cat_name+"  (#{@count1})", product_manu_index_path(i)%>
+
+            </div>
+
+		    <div class="clearfix"></div>
+                
+    	</div>
+
+    <%end%>                          
+
+</div>
+ 
+</div>
+                            
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

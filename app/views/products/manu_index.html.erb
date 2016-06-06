@@ -1,0 +1,69 @@
+<html>
+
+<head>
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  
+<style>
+
+a:hover{ color:white;}
+
+</style>
+
+</head>
+
+<body>
+
+  <div class="body-wrap">
+            	
+  <div class="body-container">
+  
+  <div class="body-header">
+
+     <%@v=@mfr.count%>
+
+    <%=$root+"(#{@v})"%>
+
+
+  </div>
+
+  <div class="body-content">
+  
+  <div class="container">
+  
+  <div class="row">
+
+	<%@y=Product.where(:cat_name=>$root).pluck(:id)[0]%>
+  
+   <%@mfr.sort.map do|i|%>
+   
+       <%a=[@y,i]%>
+
+       <div class="col-md-6">
+
+           <div class="manufacture-index hvr-sweep-to-right">	
+
+             <%@count1=Mfrindex.where(:m_name=>i).where(:mtax=>@y).pluck(:tax).uniq.map{|i| i[1]}.count%>
+            
+               <%= link_to i+"(#{@count1})",products_manu1_path(a)%>
+
+           </div>
+
+           	   <div class="clearfix"></div>
+                
+       </div>
+
+  <%end%>                          
+
+ </div>
+ 
+</div>
+ 
+</div>
+
+</div>
+
+</div>
+
+                             
+</body></html>

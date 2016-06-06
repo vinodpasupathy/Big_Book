@@ -1,0 +1,277 @@
+
+<div class="body-wrap">
+
+<div class="body-container">
+
+<div class="body-header">
+
+ <%=link_to $cath.last, product_path(Product.where(:cat_name=>$cath.last).pluck(:id)[0]),:style=>"color:white;"%>
+
+</div>
+
+<div class="body-content">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-md-12">
+
+   <ol class="breadcrumb">
+
+     <% @taxo=$taxo.reverse%>
+
+     <% @taxo.map do |i|%>
+
+        <li><a href="#"><%=link_to i.pluck(:cat_name)[0], product_path(i.pluck(:id)[0])%></a></li><%break if @taxo.last==i%> 
+
+        <i class="fa fa-angle-double-right" style="font-size: 16px; color: rgb(185, 31, 31);"></i> 
+
+     <%end%>
+
+   </ol>
+
+</div>
+                       
+<% if  @product1.is_a? Mongoid::Criteria %>
+
+<%@product1.order("cat_name ASC ").to_a.map do|i|%>
+
+<% @ten=Product.where(:cat_name=>i.cat_name).pluck(:id)[0]%>
+
+<%@ca=Product.where(:parent_id=>@ten.to_s)%>
+
+<%@a=[]%>
+
+<%@a << (Product.where(:cat_name=>i.cat_name).only(:id)).to_a%>
+
+<%@a.map do |o|%>
+
+<%o.map do |i|%>
+
+<%if Product.where(:parent_id=>i.id).present?%>
+
+<%@a << Product.where(:parent_id=>i.id).only(:id)[0].to_a%>
+
+<%else%>
+
+<%b=Sku.where(:p_id=>i.id).pluck(:i_id)[0]%>
+
+<%@ima=Sku.where(:i_id=>b).where(:c_name=>"IMAGE").pluck(:value)[0]%>
+
+<%end%><%end%><%end%>
+
+<div class="clearfix">
+
+</div>
+
+<div class="clearfix">
+
+</div>   
+
+<div class="col-md-12">
+
+<div class="category">
+
+<div class="image">
+
+  <%if @ima.blank?%>
+ 
+    <img src="/assets/not.jpeg">
+ 
+  <%else%>
+ 
+    <%=image_tag @ima%>
+ 
+  <%end%>
+ 
+</div>
+
+<div class="content">
+
+
+
+<div class="header">
+
+<%if Sku.where(:p_id=>i.id).any?%>
+
+  <%@count1=Sku.where(:p_id=>i.id).pluck(:i_id).uniq.count%>
+
+  <%else%>
+
+  <%@count1=Product.where(:parent_id=>i.id).count%>
+
+  <%end%>
+  
+  <%=link_to i.cat_name+" (#{@count1})", product_path(i),:style=>"color:white;"%>
+
+</div>
+
+  
+  <ul>
+
+    <%@ca.order("cat_name ASC ").map do |i|%>
+
+      <li>
+<%@count1=Sku.where(:p_id=>i.id).pluck(:i_id).uniq.count%>
+
+    <%=link_to i.cat_name+" (#{@count1})", product_path(i)%>
+
+      </li>
+
+    <%end%>
+
+  </ul>
+
+</div>
+
+ <div class="clearfix">
+
+</div>
+
+<div class="clearfix">
+
+</div> 
+
+</div>
+
+</div>  
+
+<%end%>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+                        
+
+
+
+<%else%>
+
+<div class="row">
+<div class="col-md-12">
+<div class="compare-table">
+<table class="table">
+ 
+  
+
+<center><%= will_paginate @product3 %></center>
+
+    <thead>
+
+       <tr>
+
+        <th>Image</th>
+        <th>Item ID</th>
+        <th>Product Name</th>
+        <th>Description</th>
+        <th> 
+          <form controller="products" action="compare" accept-charset="UTF-8" method="post" name="form1" onsubmit="return validate()">
+          <button class="btn btn-block btn-default hvr-sweep-to-right" type="submit"><img src="/assets/compare-icon.png"> Compare</button></th>
+
+  
+
+
+
+     <!--th>Image</th>
+
+     <th>Item ID</th>
+
+     <th>Product Name</th>
+
+     <th>Description</th>
+    
+     <form controller="products" action="compare" accept-charset="UTF-8" method="post" name="form1" onsubmit="return validate()"-->
+      
+     <!--th--><!--input name="commit" value="Compare" type="submit" class="btn btn-block btn-default hvr-sweep-to-right" img src="/assets/compare-icon.png"/--><!--/th-->
+  
+  </tr>
+    
+ </thead>
+
+ 
+ <%@product3.map do|i|%>
+  
+ <%@p=Sku.where(:i_id=>i)%>
+
+ <%@im=@p.where(:c_name=> "IMAGE").pluck(:value)[0]%>
+
+<%@i1=@p.where(:name=>"Product Name").pluck(:id)[0]%>
+ 
+ <tbody><tr class="odd">
+
+ <%if @im.blank?%>
+
+<td> <img src="/assets/not.jpeg" alt="Image not available"></td>
+
+ <%else%>
+
+ <td><%=image_tag @im%></td>
+
+ <%end%>
+
+  <td><%= i%></td>
+
+  <td><%=@p.where(:name=> "Product Name").pluck(:value)[0]%></td>
+
+  <td><%=link_to @p.where(:name=> "Global Description").pluck(:value)[0], edit_product_path(i) %></td>
+
+  <td><%= check_box_tag("is[]", i, false,{:onclick=>"chkcontrol();"})%></td>
+</tr>
+
+</tbody>
+
+<%end%></table>
+
+<center><%= will_paginate @product3 %></center>
+
+</div>
+</div>
+</div>
+
+
+<%end%>
+
+</div>
+ <script language="javascript">
+
+ function validate()
+
+ { var chks = document.getElementsByName('is[]');
+
+ var checkCount = 0;
+
+ for (var i = 0; i < chks.length; i++)
+
+ { if (chks[i].checked)
+
+ { checkCount++; } }
+
+ if (checkCount < 2)
+
+ { alert("Please Select at least two.");
+
+ return false; }
+
+ else if (checkCount > 4) {
+
+ alert("Select Only four");
+
+ return false; }
+
+ else { return true; } }
+
+</script>
+
+
+
+
+
+

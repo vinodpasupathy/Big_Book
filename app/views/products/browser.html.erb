@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProductCatalog</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
+  <meta name="description" content="Source code generated using layoutit.com">
+  <meta name="author" content="LayoutIt!">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+     
+<style>
+
+a:hover{ color: #309bcc;}
+
+</style>
+
+</head>
+
+<body>
+  
+  <div class="login-back">
+  
+  <div class="container-fluid">
+  
+  <div class="row">
+  
+  <div class="col-md-12 logo-back">
+  
+          <div class="logo">
+  
+            <%= link_to image_tag("/assets/logo.png"),products_new_account_path(),:title=>"Create New Account" %>
+  
+          </div>
+
+          <% if flash[:notice] %>
+
+          <div style="color: red;" class="alert alert"><%= flash[:notice]%></div>
+
+          <% end %>
+   
+          <div class="login-con">
+   
+                <h1>Welcome to!</h1>
+   
+                <p>Import & Export</p>
+   
+<div class="logform">
+
+<table>
+
+<%= form_for [@product],:html => {:class=>"popup-form"}, :url=>{:controller=>"products", :action=>"browser_process"} do |f|%>
+
+<tr>
+<td><%= f.file_field :file1,:required=>"true",:accept=>".csv", :id=>"product_file1"%></td>
+
+  <!--<td><input required="required" accept=".csv" name="#{product[:file1]}" id="product_file1" type="file" data-input="false" data-badge="false"></td>-->
+
+  <td>&nbsp;&nbsp;<button style="width:92%;" type="submit" class="btn btn-info" ><i class="fa fa-cloud-upload"></i>Upload</button></td>
+
+</tr>
+
+<% end %>
+
+<%= form_for [@product],:html => {:class=>"popup-form"}, :url=>{:controller=>"products",:action=>"homexls",format:"xls"} do|i|%>
+
+<%@ca=@product=Product.where(:parent_id=>nil)%>
+
+<tr>
+
+  <td>
+
+    <div class="select-style">
+
+     <%= i.select "id",options_from_collection_for_select(@ca, "id", "cat_name"),{:include_blank=>"Select Category"},:required=>"",:class=>"txt"%>
+
+    </div>
+
+  </td>
+
+
+
+<td>&nbsp;&nbsp;<button type="submit" class="btn btn-info"><i class="fa fa-cloud-download"></i>Download</button></td>
+
+</tr>
+
+<%end%>
+
+<%= form_for :sku, :html => {:class=>"popup-form"}, :url=>{:controller=>"products",:action=>"hxls",format:"xls"} do|i|%>
+
+<% @man=(Sku.where(:name=>"Manufacturer Name").only(:value)).uniq{|i|i.value}%>
+
+<tr>
+
+  <td>
+
+     <div class="select-style">
+
+<%= i.select "id",options_from_collection_for_select(@man, "id", "value"),{:include_blank=>"Select Manufacturer"},:required=>"true",:class=>"txt"%>
+
+     </div>
+
+  </td>
+
+<td>&nbsp;&nbsp;<button type="submit" class="btn btn-info"><i class="fa fa-cloud-download"></i>Download</button></td>
+
+
+</tr>
+
+<%end%>
+
+</table>
+
+<%= link_to 'Click To Download Import Format File', products_help_browser_path %>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
+

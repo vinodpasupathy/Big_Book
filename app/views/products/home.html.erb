@@ -1,0 +1,129 @@
+<div class="body-wrap">
+ 
+<div class="body-container">
+
+<html lang="en">
+
+ <head>
+
+ </head> 
+<style>
+
+a:hover{ color:white;}
+
+</style>
+
+
+ 
+ <body>
+ 
+ <div class="clearfix"></div>
+        
+ <div class="body-header">Product Catalog</div>
+
+ <div class="body-content">
+
+               <div class="container">
+
+                <div class="row">
+
+                  <% @product.map do |i|%> 
+ 
+                <div class="col-md-4 col-sm-6">
+ 
+                <div class="product-container">
+ 
+                <div class="header">
+
+                     <%@count1=Product.where(:parent_id=>i.id).count%>
+
+                    <%=link_to i.cat_name+"  (#{@count1})",product_path(i),:style=>"color:white;"%></div>
+ 
+                <div class="image">
+
+                    <% @ten=Product.where(:cat_name=>i.cat_name).pluck(:id)[0]%>
+
+                    <%@ca=Product.where(:parent_id=>@ten.to_s).order("cat_name ASC")%>
+
+                    <%@a=[]%>
+
+                    <%@a << (Product.where(:cat_name=>i.cat_name).only(:id)).to_a%>
+
+                    <%@a.map do |o|%>
+
+                    <%o.map do |i|%>
+
+                    <%if Product.where(:parent_id=>i.id).present?%>
+
+                      <%@a << Product.where(:parent_id=>i.id).only(:id)[0].to_a%>
+
+                    <%else%>
+
+                      <%@ima=Sku.where(:p_id=>i.id).where(:c_name=>"IMAGE").pluck(:value)[0]%>
+
+
+                    <%end%><%end%><%end%>
+
+                    <%if @ima.blank?%>
+
+                        <img src="/assets/not.jpeg" alt="Image not available">
+
+                    <%else%>
+
+                        <%=image_tag @ima%>
+
+                    <%end%>
+             
+                </div>
+
+                <%= form_tag({ controller: 'products', action: 'show'}, method: 'get') do %>
+
+                <div class="content">
+
+                <div class="form-group ">
+
+                   <% @ten=Product.where(:cat_name=>i.cat_name).pluck(:id)[0]%>
+
+                   <%@caa=Product.where(:parent_id=>@ten.to_s).to_a%>
+
+                <label>Select Category</label>
+                 
+                <class="form-control">
+
+                <div class="select-style">
+
+                   <%= select_tag "id",options_from_collection_for_select(@ca, "id", "cat_name"),{:include_blank=>"Select Option",:required=>""} %>
+                </div>
+
+                </div>
+              
+                <button class="btn btn-block btn-default hvr-sweep-to-right"><img src="/assets/view-icon.png">Category</button>                                      
+               
+                </div>
+
+                <%end%>
+                
+                <div class="clearfix"></div>
+                
+                </div>
+                
+                </div>
+                
+                <%end%> 
+                
+                </div>
+                
+                </div>  
+                          
+                <div class="clearfix"></div>
+                            
+                </div>
+
+    
+</body>
+
+</html>
+
+</div>
+
+</div>

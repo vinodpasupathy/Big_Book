@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <head>
+
+
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<style>
+
+  a:hover{ color:aqua;}
+
+
+  .nav-tabs > li.active > a:hover {
+    color: white!important;
+    cursor: default;
+    background-color: #06ADC3 !important;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    color: white!important;
+    cursor: default;
+    background-color: #06adc3;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+</style>
+
+
+<style>
+
+
+.transition {
+    -webkit-transform: scale(1.6); 
+    -moz-transform: scale(1.6);
+    -o-transform: scale(1.6);
+    transform: scale(1.6);
+}
+#content {
+  -webkit-transition: all .4s ease-in-out;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -ms-transition: all .4s ease-in-out;
+}
+
+#content {
+    width:220px;
+    margin:30px;
+}
+
+</style>
+
+</head>
+
+
+<div class="body-wrap">
+
+<div class="body-container">
+
+    <div class="body-header">
+
+    <%=link_to $cath.last, product_path(Product.where(:cat_name=>$cath.last).pluck(:id)[0]), {:style=>"color:white;"}%></h5>
+  
+     </div>
+
+<div class="body-content">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-md-12">
+
+   <ol class="breadcrumb">
+
+     <%@taxo=$taxo.reverse%>
+
+     <%@taxo.map do |i|%>
+
+        <%=link_to i.pluck(:cat_name)[0], product_path(i.pluck(:id)[0])%>
+
+        <%break if @taxo.last==i%>&nbsp;<i class="fa fa-angle-double-right"></i> 
+
+    <%end%>
+
+   </ol>
+
+</div>
+
+     <div class="clearfix"></div>
+
+      <div class="container">
+
+        <div style="background-color: rgb(36, 45, 53);" class="mm">
+     
+          <ul class="nav nav-tabs">
+    
+             <li class="active"><a href="#OverView">OverView</a></li>
+       
+             <li><a href="#menu1">Specifications</a></li>
+       
+             <li><a href="#menu2">Media</a></li>
+          
+          </ul>
+
+        </div>
+
+             <div class="tab-content">
+    
+               <div id="OverView" class="tab-pane fade in active">
+     
+                 <p>
+         
+                   <div class="pname"><b>
+         
+                    <%=@sku3.where(:name=>"Product Name").pluck(:value)[0]%></b>
+                  
+                   </div>
+
+              <div class="table- responsive ">                
+                 <table class="table">
+         
+                   <tbody>
+
+                      <tr>
+
+                        <td>
+           
+                          <%@sku3.map do |i|%>
+             
+                             <%next if i.name=="Brand" or i.name=="Product Name"%>
+             
+                             <%=i.value%>&nbsp;&nbsp;
+            
+                          <%end%>
+
+                        <td>
+
+                      </tr>
+       
+                 </tbody>
+          
+               </table>
+         
+            </div>
+
+  <div class="table-responsive">                    
+ 
+    
+
+           
+
+               <%@sku4.map do |i|%>
+
+                 <%next if i.name=="Brand" or i.name=="Product Name"%>
+         
+                 <%=i.value%>&nbsp;&nbsp;
+        
+               <%end%>
+
+            
+        
+
+           <%if @img.blank?%>
+
+
+
+
+           <img src="/assets/not.jpeg" alt="Image not available">
+
+
+
+           <%else%>
+
+          
+
+           <%=image_tag @img,:id=>"content",:style=>"margin-left:25%;"%>
+
+            
+
+           <%end%>
+           
+          
+
+
+           <%if @ml.blank?%>
+
+           <img src="/assets/lo-not.jpeg" alt="Logo not available" style="margin-left:25%">
+
+            <%else%>
+
+           <%=image_tag @ml,:style=>"margin-left:25%;" %>
+
+           <%end%>
+
+
+            
+
+
+
+          
+        </div>
+
+
+     <div class="table-responsive">          
+        <table class="table">
+        <tbody>
+         <%@sku5.map do |i|%>
+
+         <%@ss=i.value.gsub(/~/,'|').split('|')%>
+         <tr>
+          <td>
+
+           <%@ss.map do|l|%>
+            
+           <div align="left"><%=l%></div>
+
+         <%end%>
+          </td>
+         </tr>
+         <%end%>
+         </tbody>
+
+         </table>
+
+          <table class="table" >
+
+   <tbody>
+
+     <tr>
+
+        <h5 style="color: rgb(0, 0, 0); font-size: large;">Related Products</h5>
+
+     </tr>
+         
+      <tr style="color: rgb(255, 253, 253); background-color: rgb(6, 173, 195);">
+              
+        <th>
+
+          <b><center>Item ID</center></b>
+
+        </th>
+             
+        <th>
+
+          <b><center>Product Name</center></b>
+
+        </th>
+        
+        <th>
+
+          <b><center>Description</center></b>
+
+        </th>
+
+      </tr>
+     
+      <%@cat.map do |i|%>
+     
+        <%next if i==@check%>
+         
+        <%@all=Sku.where(i_id:i)%>
+
+          <tr style="color: black;">
+          
+             <td>
+
+              <a><%=link_to @all.pluck(:i_id)[0],edit_product_path(@all.pluck(:i_id)[0])%></a>
+
+            </td>
+           
+            <td>
+
+               <%=@all.where(name:"Product Name").pluck(:value)[0]%>
+
+            </td>
+          
+            <td>
+
+              <%=@all.where(name:"Global Description").pluck(:value)[0]%>
+
+            </td>
+          
+         </tr>
+         
+     <%end%>
+          
+          
+    <tbody>
+    
+  </table>
+
+
+
+       </div>
+      </p>
+  </div>
+
+
+<div id="menu1" class="tab-pane fade">
+   <p>
+       <div class="pname">
+          <b><%=@sku3.where(:name=>"Product Name").pluck(:value)[0]%></b>
+          </div>
+
+          <div style="Times New Roman&quot;;" class="table- responsive ">                
+         <table class="table">
+         <tbody><tr><td>
+           <%@sku3.map do |i|%>
+             <%next if i.name=="Brand" or i.name=="Product Name"%>
+             <%=i.value%>&nbsp;&nbsp;
+            <%end%><td></tr>
+          </tbody>
+          </table>
+       </div>
+
+
+    <div style="Times New Roman&quot;;" class="table-responsive">          
+    <table class="table">
+    <tbody>
+    <%@sku1.map do |i|%>
+     <tr>
+     <td><%=i.name %></td>
+     <td><%=i.value%>
+     <%=i.unit%></td>
+     </tr>
+    <%end%>
+    </tbody>
+    </table>
+    </div>
+   </p>
+  </div>
+ 
+
+ <div id="menu2" class="tab-pane fade">
+  
+          <div class="pname">
+          <b><%=@sku3.where(:name=>"Product Name").pluck(:value)[0]%></b>
+          </div>
+
+          <div style="Times New Roman&quot;;" class="table- responsive ">                
+         <table class="table">
+         <tbody><tr><td>
+           <%@sku3.map do |i|%>
+             <%next if i.name=="Brand" or i.name=="Product Name"%>
+             <%=i.value%>&nbsp;&nbsp;
+            <%end%><td></tr>
+          </tbody>
+          </table>
+       </div>
+      
+
+
+  <div style="Times New Roman&quot;;" class="table-responsive">  
+  <table class="table">
+    <tbody>
+     <%@sku6.map do |i|%>
+
+     <tr>
+     <td><%=link_to i.value,i.value,:target=>'_blank' %></a></td>
+     </tr>
+    <%end%>
+     </tbody>
+  </table>
+  </div>
+  </p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+ </body>
+</html>
+
+
+
+
+<script>
+$(document).ready(function(){
+    $(".nav-tabs a").click(function(){
+        $(this).tab('show');
+    });
+});
+</script>
+
+<script>
+$(document).ready(function(){
+    $('#content').hover(function() {
+        $("#content").addClass('transition');
+    
+    }, function() {
+        $("#content").removeClass('transition');
+    });
+});
+
+</script>

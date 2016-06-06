@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Product Catalog</title>
+    <link href="/assets/logo 1.png" rel="shortcut icon" type="image/x-icon"/>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+   <script src="/assets/bootstrap.min.js"></script>
+    <link href="/assets/bootstrap.min.css" media="all" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+   
+  </head>
+      
+
+<body>
+
+<div id="header-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="left-container">
+          <div class="menu-icon">
+            <img src="/assets/menu-icon.png">
+          </div>
+          <div class="search-box">
+              <div class="form-group">
+                <%= form_tag(action: "result1", :method => "get", id: "search-form") do %>
+                  <input id="search" name="search" class="form-control" type="text" placeholder="Search">
+                  <button class="btn btn-block btn-default" type="submit">
+                   <img src="/assets/searh-icon.png">
+                   </button>
+                <%end%>
+              </div>
+          </div>
+        </div>
+         <div class="logo-container">
+            <%= link_to image_tag("/assets/logo.png"),root_path,:title=>"Goto Home..." %>
+         </div>
+         <div class="right-container">
+            <a title="Admin Page..." href="/products/login">
+              <button class="btn btn-block btn-default hvr-sweep-to-right"><img src="/assets/key-icon.png"> Login</button>
+            </a>
+         </div>
+      </div>
+      </div>
+   </div>
+ </div>
+
+
+
+<div class="container-fluid">
+  <div class="row  wrapper">
+    <%@paq=params[:id] || params[:product_id] || "#{params[:format]}".split("/")[0]%>
+    <%unless Sku.where(:p_id=>@paq).present?%>
+     <div class="sidebar"><!--open sidebar -->
+        <div class="clearfix"></div>
+            <div id="scroll"><!--open scroll -->
+               <div class="panel-collapse  panel-scroll" id="accordion"><!--open colla-pse scroll -->
+                     <div class="panel panel-default"><!--open default -->
+                        <div class="panel-heading"><!--open -->
+                         <h4 class="panel-title">
+                           <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><img src="/assets/category-icon.png"> Categories</a>
+                          </h4>
+                        </div><!--close panel heading -->
+                        <div id="collapseOne" class="panel-collapse collapse"><!--open -->
+                           <div class="panel-body"><!--open -->
+                              <ul>
+                                 <%@product=Product.where(parent_id:nil).order("cat_name ASC")%>
+                                 <%@product.map do |i|%>
+                                 <%@count1=Product.where(:parent_id=>i.id).count%>
+                                 <li><%=link_to i.cat_name+"  (#{@count1})",product_path(i)%></li>
+                                 <%end%>
+                             </ul>  
+                           </div><!--close panel body -->
+                        </div><!--close collapse -->
+                     </div><!--close panel default-->
+                     <div class="panel panel-default"><!--open default -->
+                        <div class="panel-heading"><!--open heading -->
+                           <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><img src="/assets/manu-icon.png"> Manufacturer</a>
+                            </h4>
+                        </div><!--close heading -->
+                           <div id="collapseThree" class="panel-collapse collapse ">
+                              <div class="panel-body">
+                                 <ul>
+                                   <%@man=Sku.where(:name=>'Manufacturer Name').distinct(:value).to_a%>
+                                   <%@man.sort.map do |j|%>
+                                     <% @count1=Mfrindex.where(:m_name=>j).pluck(:mtax).uniq.count%>
+                                   
+                                   <!--%@ccc=Sku.where(:name=>'Manufacturer Name').where(:value=>j)%-->
+
+                                   <li><%=link_to j+"(#{@count1})",products_manu_path(j) %></li>
+
+                                   <%end%>
+                                 </ul>
+                              </div><!--panel body close -->
+                           </div><!--colapse close -->
+                     </div><!--close panel default -->
+                     <div class="panel panel-default"><!--open default -->
+                       <div class="panel-heading"><!--open heading -->
+                         <h4 class="panel-title">
+                           <a href="/products/manu_cate"><img src="/assets/view-manu-icon.png" alt="View manu icon">View Manufaturers Index</a>
+                         </h4>
+                       </div><!--close heading -->
+                     </div><!--close default -->
+               </div><!--close collapse panel scroll -->
+             </div><!--close scroll -->
+
+             <div class="follow-container">Follow Us on
+                   <div class="social">
+                    <a target="_blank" href="https://www.facebook.com/" ><i class="fa fa-facebook" title="Facebook"></i></a>
+                    <a target="_blank" href="https://www.twitter.com/" ><i class="fa fa-twitter" aria-hidden="true" title="Twitter"></i></a>
+                    <a target="_blank" href="https://www.google-plus.com/" ><i class="fa fa-google-plus" aria-hidden="true" title="Google-Plus"></i></a>
+                    <a target="_blank" href="https://www.pinterest.com/" ><i class="fa fa-pinterest" aria-hidden="true" title="Pinterest"></i></a>
+                    <a target="_blank" href="https://www.envelope.com/" ><i class="fa fa-envelope" aria-hidden="true" title="Envelope"></i></a>
+                    <a target="_blank" href="https://www.linkedin.com/" ><i class="fa fa-linkedin" aria-hidden="true" title="linkedin"></i></a>
+                   </div><!--close social -->  
+                   <div class="clearfix"></div>
+                 </div><!--close  follow -->
+                 <div class="footer-container">
+                © 2016 Altiusproductcatalog.com
+                <a target="_blank" href="https://www.altiustechnology.com/" >All rights reserved.</a>
+                <div class="clearfix"></div>
+                </div><!--close footer -->
+                <div class="clearfix"></div>
+          </div><!--close sidebar -->
+
+                
+  <%else%>
+
+  
+            <div class="filterbar"><!--open filterbar -->
+                <form controller="products" action="#{params[:action]}" accept-charset="UTF-8" method="get" name="form1" onsubmit="return validat()">
+
+                <div class="headbar"><!--open headbar -->
+                   Filter By  <button type="submit" class="btn btn-block btn-default hvr-sweep-to-right">Apply</button>
+                </div><!--close headbar -->
+                  
+                  <%@filt1=[]%>
+
+                  <%@sku1=[]%>
+
+                  <%@act=params[:action]%>
+                  <%case @act%>
+                  <%when "result"%>
+
+                      <%$ssk.map do |ii|%>
+                        <%@filt1 << Sku.where(:c_name=>"Attributes").where(:i_id=>"#{ii}").pluck(:name)%>
+                      <%end%>
+                      <%@filt1=@filt1.flatten%>
+                      <%@filt=@filt1.select{|i| @filt1.count(i) > 1 }%>
+
+                  <%when "show"%>
+
+                      <%@filt1=Sku.where(:p_id=>@paq).where(:c_name=>"Attributes").pluck(:name)%>
+                      <%@filt1=@filt1.flatten%>
+                      <%@filt=@filt1.select{|i| @filt1.count(i) > 1 }%>
+                      <%@sku1=Sku.where(:p_id=>@paq).where(:c_name=>"Attributes")%>
+
+                  <%when "manu"%>
+
+                        <%@manuid=Sku.where(:p_id=>@paq).where(:name=>"Manufacturer Name").where(:value=>$h).pluck(:i_id).uniq%>
+
+                        <%@manuid.map do |p|%>
+                          <%@filt1<<Sku.where(:p_id=>@paq).where(:i_id=>p).where(:c_name=>"Attributes").pluck(:name)%>
+                        <%end%>
+                        <%@filt1=@filt1.flatten%>
+                       
+                  <%@filt=@filt1.select{|i| @filt1.count(i) > 1 }%>
+                        
+                  <%when "manu1"%> 
+
+                        <%@manu1id=Sku.where(:p_id=>@paq).where(:name=>"Manufacturer Name").where(:value=>$manufacture).pluck(:i_id).uniq%>
+                        <%@manu1id.map do |p|%>
+                          <%@filt1<<Sku.where(:p_id=>@paq).where(:i_id=>p).where(:c_name=>"Attributes").pluck(:name)%>
+                        <%end%>
+                        <%@filt1=@filt1.flatten%>
+                  <%@filt=@filt1.select{|i| @filt1.count(i) > 1 }%>
+                  <%end%>
+                  
+                  <%t=0%>
+                  <div class="clearfix"></div>                
+                  <div id="scroll">
+                  <div class="panel-collapse  panel-scroll" id="accordion">
+                 <div class="panel panel-default">
+
+                    <%@filt.flatten.sort.uniq.map do |i|%>
+
+                       <%next if params[:action]=="manu" && i=="Brand" || params[:action]=="manu1" && i=="Brand"%>
+                       <%case @act%>
+                       <%when "result"%>
+                          <%@root=$skuu.where(:name=>i).only(:i_id,:value)%>
+                       <%when "show"%>
+                          <%@skkk=Sku.where(:p_id=>@paq)%>
+                          <%@root=@skkk.where(:p_id=>@paq).where(:name=>i).only(:i_id,:value)%>
+                       <%when "manu"%>
+                          <%@skkk=Sku.where(:p_id=>@paq).where(:name=>"Manufacturer Name").where(:value=>$h).pluck(:i_id).uniq%>
+                          <%@root=@skkk.map{|o| Sku.where(:i_id=>o).where(:name=>i).only(:i_id,:value).to_a}%>
+                             
+                       <%when "manu1"%>
+                          <%@skkk=Sku.where(:p_id=>@paq).where(:name=>"Manufacturer Name").where(:value=>$manufacture).pluck(:i_id).uniq%>
+                          
+                          <%@root=@skkk.map{|o| Sku.where(:i_id=>o).where(:name=>i).only(:i_id,:value).to_a}%>
+                       <%end%>
+                       <%@cou=@root.flatten.uniq{|i| i.value}%>
+                       <div class="panel-heading">
+
+                         <h4 class="panel-title">
+
+                           <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%=t%>"><i class="fa fa-filter" aria-hidden="true" style="color:rgb(149, 172, 195);"></i>  <%=i + "("+@cou.count.to_s+")"%></a>
+                         </h4>
+                       </div> <!--close heading -->
+                       
+                       
+                       <%@i=[]%>
+                       <div id="collapse<%=t%>" class="panel-collapse collapse ">
+                          <div class="panel-body">
+                            <ul>
+                              
+                              <%@root.flatten.sort.map do |i|%>
+
+                              <%next if @i.include?(i.value)%>
+                              <%@cc=@root.flatten.select{|p| p.value==i.value}.count%>
+                              <li>
+
+                              <div class="checkbox">
+
+                                <label>
+
+                                  <%=check_box_tag 'is[]', i.i_id, false,{:onclick=>"chkcontrol();"}%>
+
+                                  <%=i.value%>(<%=@cc%>)
+
+                                </label>
+
+                              </div>
+
+                              </li>
+
+                              <%@i<<i.value%>
+                              <%end%>
+                            </ul>
+                          </div><!--close panel body -->
+                       </div><!--close collapse -->
+                       <%t=t+1%>
+                    <%end%>
+                 </div><!--close panel default -->
+              
+              </div><!--scroll collapse  -->
+             </div><!--close scroll  -->
+             </form>
+            
+            <div class="choose-container">
+              <%=button_to "Choose Another Category",root_path,:method => :get,:class=>"btn btn-block btn-default hvr-sweep-to-right"%>
+            </div><!--close container -->
+  
+            </div><!-- closefilterbar  -->
+                    
+              <%end%>
+
+                     
+                 
+                 
+    </div><!--close row wrapper -->
+  </div>  <!--close container-fluid -->
+      
+
+<div data-pjax-container>
+
+<%= yield %> 
+
+</div></body>
+
+</html>
+
+<script>
+$(".menu-icon").click(function(){
+    $(".sidebar").toggleClass("show-nav");
+  $(".body-wrap").toggleClass("full-width");  
+}); 
+</script>
+
+<script>
+$(".menu-icon").click(function(){
+    $(".filterbar").toggleClass("show-nav");
+  $(".row").toggleClass("full-width");  
+}); 
+</script>
+
+<script>
+
+$(function(){
+    $('.scroll').slimScroll({
+        height: '380px'
+    });
+});
+</script>
+
+
+
+<script type="text/javascript">
+ function validat()
+
+ { var chks = document.getElementsByName('is[]');
+
+ var checkCount = 0;
+
+ for (var i = 0; i < chks.length; i++)
+
+ { if (chks[i].checked)
+
+ { checkCount++; } }
+
+ if (checkCount == 0)
+
+ { alert("Please select atleast one option");
+
+ return false; }
+ else { return true; } }
+
+ </script>

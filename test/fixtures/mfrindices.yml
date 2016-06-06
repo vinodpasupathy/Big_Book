@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  i_id: MyString
+  m_name: MyString
+  taxonomy: MyString
+  mn_dummy: MyString
+  mpn_dummy: MyString
+  p_id: 1
+
+two:
+  i_id: MyString
+  m_name: MyString
+  taxonomy: MyString
+  mn_dummy: MyString
+  mpn_dummy: MyString
+  p_id: 1

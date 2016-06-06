@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+  <Table>
+  <Row>
+<Cell><Data ss:Type="String">Item ID</Data></Cell>
+<Cell><Data ss:Type="String">Global Description</Data></Cell>
+<Cell><Data ss:Type="String">Manufacturer Name</Data></Cell>
+<Cell><Data ss:Type="String">Manufacturer Logo</Data></Cell>
+<Cell><Data ss:Type="String">Manufacturer Part Number</Data></Cell>
+<Cell><Data ss:Type="String">Product Name</Data></Cell>
+<Cell><Data ss:Type="String">PSF ID</Data></Cell>
+<Cell><Data ss:Type="String">ATS ID</Data></Cell>
+<Cell><Data ss:Type="String">Brand</Data></Cell>
+<Cell><Data ss:Type="String">Taxonomy</Data></Cell>
+<Cell><Data ss:Type="String">HTML Link1</Data></Cell>
+<Cell><Data ss:Type="String">HTML Link2</Data></Cell>
+<Cell><Data ss:Type="String">PDF Link1</Data></Cell>
+<Cell><Data ss:Type="String">PDF Link2</Data></Cell>
+<Cell><Data ss:Type="String">IMAGE1</Data></Cell>
+<Cell><Data ss:Type="String">IMAGE2</Data></Cell>
+<%t=0%>
+<%56.times do|i|%>
+<%t=t+1%>
+<%y1="Attrname"+"#{t}" %>
+<%y2="Attrvalue"+"#{t}" %>
+<%y3="Attrunit"+"#{t}" %>
+<Cell><Data ss:Type="String"><%=y1%></Data></Cell>
+<Cell><Data ss:Type="String"><%=y2%></Data></Cell>
+<Cell><Data ss:Type="String"><%=y3%></Data></Cell>
+<%end%>
+</Row>
+<%$b.each do|i|%>
+<% idd=i.i_id %>
+<%n1=Sku.where(:i_id=>idd)%>
+  <%t4=n1.where(:name=>"Global Description").pluck(:value)[0]%>
+  <%t5=n1.where(:name=>"Manufacturer Logo").pluck(:value)[0]%>
+  <%tt5=Mfrindex.where(:i_id=>idd).pluck(:m_name)[0]%>
+  <%t6=n1.where(:name=>"Manufacturer Part Number").pluck(:value)[0]%>
+  <%t=n1.where(:i_id=>idd).pluck(:p_id)[0]%>
+  <%tt=Product.where(:id=>t).pluck(:cat_name)[0]%>
+  <%t1=n1.where(:name=>"PSF ID").pluck(:value)[0]%>
+  <%t2=n1.where(:name=>"ATS ID").pluck(:value)[0]%>
+  <%tt2=Mfrindex.where(:i_id=>idd).pluck(:taxonomy)[0]%>
+  <%t3=n1.where(:name=>"Brand").pluck(:value)[0]%>
+  <%t7=n1.where(:name=>"HTML Link-1").pluck(:value)[0]%>
+  <%t8=n1.where(:name=>"HTML Link-2").pluck(:value)[0]%>
+  <%t9=n1.where(:name=>"PDF Link-1").pluck(:value)[0]%>
+  <%t10=n1.where(:name=>"PDF Link-2").pluck(:value)[0]%>
+  <%t11=n1.where(:name=>"IMAGE Link-1").pluck(:value)[0]%>
+  <%t12=n1.where(:name=>"IMAGE Link-2").pluck(:value)[0]%>
+  <%n=n1.where(:c_name=>'Attributes').pluck(:name).uniq%>
+  <%o=n1.where(:c_name=>'Attributes').pluck(:value).uniq%>
+  <%p=n1.where(:c_name=>'Attributes').pluck(:unit).uniq%>
+<Row>
+<Cell><Data ss:Type="String"><%= idd%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t4%></Data></Cell>
+<Cell><Data ss:Type="String"><%= tt5%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t5%></Data></Cell>
+<Cell><Data ss:Type="String"><%=t6%></Data></Cell>
+<Cell><Data ss:Type="String"><%=tt%></Data></Cell>    
+<Cell><Data ss:Type="String"><%=t1%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t2%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t3%></Data></Cell>
+<Cell><Data ss:Type="String"><%= tt2%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t7%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t8%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t9%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t10%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t11%></Data></Cell>
+<Cell><Data ss:Type="String"><%= t12%></Data></Cell>
+<%w=n.count%>
+<%(0..w-1).each do |h|%>
+<Cell><Data ss:Type="String"><%= n[h]%></Data></Cell>
+<Cell><Data ss:Type="String"><%= o[h]%></Data></Cell>
+<Cell><Data ss:Type="String"><%= p[h]%></Data></Cell>
+<%end%>
+</Row>
+<%end%>
+</Table>
+</Worksheet>
+</Workbook>
+

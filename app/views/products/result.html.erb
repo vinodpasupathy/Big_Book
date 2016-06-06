@@ -1,0 +1,121 @@
+<html>
+
+<head>
+
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+</head>
+
+<body>
+
+
+
+  <div class="body-wrap">
+
+<div class="body-container">
+
+<div class="body-header">
+
+ You searched for "<%= $param2 %>"
+
+</div>
+
+
+<div class="body-content">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-md-12">
+
+   <ol class="breadcrumb">
+
+  <%= page_entries_info $ssk%> 
+
+  </ol>
+</div>
+</div>
+
+
+
+  <center><%= will_paginate $ssk %></center>
+  
+
+  <% if $ssk.blank? %>
+
+ <h4><font color="crimson">Oops! Your search didn't produce any result</font></h4>
+
+<%else%>
+
+<div class="row">
+<div class="col-md-12">
+<div class="compare-table">
+<table class="table">
+ 
+  
+  <thead>
+
+   <tr>
+
+     <th>Image</th>
+
+     <th>Item ID</th>
+
+     <th>Product Name</th>
+
+     <th>Manufactures</th>
+     
+      </tr>
+    
+ </thead>
+
+ <%$ssk.each do|i|%>
+
+ <%@p=Sku.where(:i_id=>i)%>
+
+ <%@im=@p.where(:c_name=> "IMAGE").pluck(:value)[0]%>
+
+ <tbody><tr class="odd">
+
+ <%if @im.blank?%>
+
+ <td><img src="/assets/not.jpeg" alt="Image not available"></td>
+
+ <%else%>
+
+ <td><%=image_tag @im, :height=>"100px", :width=>"100%" %></td>
+
+ <%end%>
+  <td><%=link_to i,  products_search_edit_path(i)%></td>
+
+  <td><%=@p.where(:name=> "Product Name").pluck(:value)[0]%></td>
+
+  <td><%=@p.where(:name=> "Manufacturer Name").pluck(:value)[0]%></td>
+
+ </tr>
+ 
+ <%end%></tbody><%end%>
+
+ </table>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+ </div>
+ <center><%= will_paginate $ssk %></center>
+ 
+ </body>
+ 
+ </html>
+
+
+
+
+
+
+

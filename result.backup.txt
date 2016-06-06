@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <%@sku=Sku.where(value:params[:search]).distinct(:id)%>
+ <% if @sku.blank? %>
+ <h4>sorry no products <%= params[:search] %></h4>
+<%else%>
+<div class="col-sm-8">
+   
+<%@sku.each do|i|%>
+
+<div class="col-sm-4">
+<div class="table-responsive">
+  <table class="table" style="width:70%; font-size:10px; line-height: 90%">
+<%@r=Sku.where(:id=>i).pluck(:i_id)[0]%>
+<%@p=Sku.where(:i_id=>@r)%>
+
+<%@im=@p.where(:c_name=> "IMAGE").pluck(:value)[0]%>
+
+<tbody><tr><td>
+  <%if @im.blank?%>
+  <img style="width:70%; height:100px;" src="/assets/not.jpeg" alt="Image not available">
+
+  <%else%>
+<%=image_tag @im, :height=>"100%", :width=>"100%" %>
+<%end%>
+</td><td><tr class="info"><td align="center"><%=link_to @r, product_search_edit_path(i)%></td></tr>
+
+
+<tr><td align="center"><%=@p.where(:name=> "Product Name").pluck(:value)[0]%></td></tr>
+<tr><td align="center"><%=@p.where(:name=> "Manufacturer Name").pluck(:value)[0]%></td></tr></td></tr></tbody>
+
+</table>
+
+</div>
+</div>
+<%end%>
+
+</div>
+<%end%>
+</tbody>
+</table>
+</div>
